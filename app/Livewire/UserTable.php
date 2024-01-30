@@ -93,7 +93,12 @@ final class UserTable extends PowerGridComponent
                 ->slot('Edit: ' . $row->id)
                 ->id()
                 ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-                ->dispatch('edit', ['rowId' => $row->id])
+                ->openModal('form-user', ['rowId' => $row->id]),
+            Button::add('delete')
+                ->slot('Delete: ' . $row->id)
+                ->id()
+                ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
+                ->dispatch('delete', ['rowId' => $row->id])
         ];
     }
 
@@ -117,6 +122,7 @@ final class UserTable extends PowerGridComponent
             parent::getListeners(),
             [
                 'exportPdf',
+                'delete',
                 'userUpdated' => '$refresh',
             ]
         );
@@ -138,6 +144,13 @@ final class UserTable extends PowerGridComponent
         $pdf->save($path . '/user.pdf');
         // Menampilkan file pdf
         return response()->download($path . '/user.pdf');
+    }
+
+    // Function to delete data
+    public function delete($rowId)
+    {
+        $user = User::findOrFail($rowId);
+        $user->delete();
     }
 
     /*

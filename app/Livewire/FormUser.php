@@ -43,15 +43,14 @@ class FormUser extends ModalComponent
         ]);
         $this->resetCreateForm();
     }
-    // public function edit($id)
-    // {
-    //     $user = User::findOrFail($id);
-    //     $this->user = $id;
-    //     $this->name = $user->name;
-    //     $this->email = $user->email;
-    //     $this->password = '';
-    //     $this->password_confirmation = '';
 
-    //     $this->openModalPopover();
-    // }
+    public function mount($rowId = null)
+    {
+        if (!is_null($rowId)) {
+            $user = User::findOrFail($rowId);
+            $this->user_id = $rowId;
+            $this->name = $user->name;
+            $this->email = $user->email;
+        }
+    }
 }
