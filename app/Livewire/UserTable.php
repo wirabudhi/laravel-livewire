@@ -67,9 +67,6 @@ final class UserTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->sortable(),
-
             Column::make('Created at', 'created_at')
                 ->sortable()
                 ->searchable(),
@@ -106,7 +103,11 @@ final class UserTable extends PowerGridComponent
             Button::add('export-pdf')
                 ->slot(__('Export PDF'))
                 ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-                ->dispatch('exportPdf', [])
+                ->dispatch('exportPdf', []),
+            Button::add('add-user')
+                ->slot(__('Add User'))
+                ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
+                ->openModal('form-user', [])
         ];
     }
 
@@ -116,6 +117,7 @@ final class UserTable extends PowerGridComponent
             parent::getListeners(),
             [
                 'exportPdf',
+                'userUpdated' => '$refresh',
             ]
         );
     }
