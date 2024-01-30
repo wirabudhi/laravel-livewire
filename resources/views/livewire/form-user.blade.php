@@ -42,6 +42,23 @@
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
+                <div class="mb-4">
+                    <label for="exampleFormControlInput5" class="block text-gray-700 text-sm font-bold mb-2">Profile
+                        Picture</label>
+                    <input type="file" id="photo_profile_path" wire:model.live="photo_profile_path"
+                        x-ref="photo_profile_path"
+                        x-on:change="
+                            photoName = $refs.photo_profile_path.files[0].name;
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                photoPreview = e.target.result;
+                            };
+                            reader.readAsDataURL($refs.photo_profile_path.files[0]);
+                        " />
+                    @error('photo_profile_path')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
         </div>
         <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
