@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            MahasiswaSeeder::class,
-            UserSeeder::class
+            UserSeeder::class,
+            // MahasiswaSeeder::class,
         ]);
     }
 }
