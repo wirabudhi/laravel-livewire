@@ -13,7 +13,7 @@ class MahasiswaForm extends ModalComponent
 {
     use WithFileUploads;
 
-    public $mahasiswa, $mahasiswa_id, $nama, $nim, $email, $jurusan, $alamat, $no_hp, $foto, $user_id;
+    public $mahasiswa, $mahasiswa_id, $nama, $nim, $email, $jurusan, $alamat, $no_hp, $foto, $user_id, $existingFoto;
 
     public function render()
     {
@@ -46,29 +46,41 @@ class MahasiswaForm extends ModalComponent
             'user_id' => 'required|exists:users,id',
         ]);
 
-        $fotoPath = null;
-        if ($this->foto) {
-            if ($this->mahasiswa_id && $oldMahasiswa = Mahasiswa::find($this->mahasiswa_id)) {
-                if ($oldMahasiswa->foto) {
-                    Storage::disk('public')->delete($oldMahasiswa->foto);
+        if ($this->mahasiswa_id) {
+            $mahasiswa = Mahasiswa::find($this->mahasiswa_id);
+            $mahasiswa->update([
+                'nama' => $this->nama,
+                'nim' => $this->nim,
+                'email' => $this->email,
+                'jurusan' => $this->jurusan,
+                'alamat' => $this->alamat,
+                'no_hp' => $this->no_hp,
+                'user_id' => $this->user_id,
+            ]);
+
+            // Only update the foto if a new photo was uploaded
+            if ($this->foto) {
+                if ($mahasiswa->foto) {
+                    Storage::disk('public')->delete($mahasiswa->foto);
                 }
+                $fotoPath = $this->foto->store('mahasiswa-photos', 'public');
+                $mahasiswa->update(['foto' => $fotoPath]);
             }
-            $fotoPath = $this->foto->store('mahasiswa-photos', 'public');
+        } else {
+            $fotoPath = $this->foto ? $this->foto->store('mahasiswa-photos', 'public') : null;
+            Mahasiswa::create([
+                'nama' => $this->nama,
+                'nim' => $this->nim,
+                'email' => $this->email,
+                'jurusan' => $this->jurusan,
+                'alamat' => $this->alamat,
+                'no_hp' => $this->no_hp,
+                'user_id' => $this->user_id,
+                'foto' => $fotoPath,
+            ]);
         }
 
-        Mahasiswa::updateOrCreate(['id' => $this->mahasiswa_id], [
-            'nama' => $this->nama,
-            'nim' => $this->nim,
-            'email' => $this->email,
-            'jurusan' => $this->jurusan,
-            'alamat' => $this->alamat,
-            'no_hp' => $this->no_hp,
-            'foto' => $fotoPath,
-            'user_id' => $this->user_id,
-        ]);
-        // dd($this->mahasiswa_id, $this->nama, $this->nim, $this->email, $this->jurusan, $this->alamat, $this->no_hp, $this->foto, $fotoPath);
-
-        // session()->flash('message', $this->mahasiswa ? 'Student updated.' : 'Student created.');
+        session()->flash('message', $this->mahasiswa ? 'Student updated.' : 'Student created.');
         $this->closeModalWithEvents([
             MahasiswaTable::class => 'mahasiswaUpdated',
         ]);
@@ -86,8 +98,10 @@ class MahasiswaForm extends ModalComponent
             $this->jurusan = $mahasiswa->jurusan;
             $this->alamat = $mahasiswa->alamat;
             $this->no_hp = $mahasiswa->no_hp;
-            $this->foto = $mahasiswa->foto;
             $this->user_id = $mahasiswa->user_id;
+            if ($mahasiswa->foto) {
+                $this->existingFoto = $mahasiswa->foto;
+            }
         }
     }
 }

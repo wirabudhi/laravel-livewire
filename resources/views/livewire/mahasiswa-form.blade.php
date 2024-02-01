@@ -72,14 +72,14 @@
                             };
                             reader.readAsDataURL($refs.foto.files[0]);
                         " />
+                    @if ($existingFoto)
+                        <x-buttons icon="download" emerald class="mt-2">
+                            <a href="{{ Storage::url($existingFoto) }}" download>Download</a>
+                        </x-buttons>
+                    @endif
                     @error('foto')
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
-                    @if ($foto)
-                        <x-buttons icon="download" emerald class="mt-2">
-                            <a href="{{ Storage::url($foto) }}" download>Download</a>
-                        </x-buttons>
-                    @endif
                 </div>
                 <div class="mb-4">
                     <label for="exampleFormControlInput7" class="block text-gray-700 text-sm font-bold mb-2">Nama
