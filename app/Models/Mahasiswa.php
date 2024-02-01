@@ -17,7 +17,8 @@ class Mahasiswa extends Model
         'jurusan',
         'alamat',
         'no_hp',
-        'foto'
+        'foto',
+        'user_id'
     ];
 
     public function scopeSearch($query, $value)

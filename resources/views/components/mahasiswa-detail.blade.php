@@ -23,7 +23,7 @@
             </tr>
             <tr>
                 <td class="border px-4 py-2 text-sm font-semibold">Email</td>
-                <td class="border px-4 py-2">{{ $row->email }}</td>
+                <td class="border px-4 py-2">{{ $row->user->email }}</td>
             </tr>
             <tr>
                 <td class="border px-4 py-2 text-sm font-semibold">Jurusan</td>

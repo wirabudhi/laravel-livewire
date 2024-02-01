@@ -163,9 +163,9 @@ return [
             'class' => Components\NativeSelect::class,
             'alias' => 'native-select',
         ],
-        'select' => [
+        'selects' => [
             'class' => Components\Select::class,
-            'alias' => 'select',
+            'alias' => 'selects',
         ],
         'select.option' => [
             'class' => Components\Select\Option::class,

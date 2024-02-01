@@ -43,7 +43,7 @@ final class MahasiswaTable extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Mahasiswa::query();
+        return Mahasiswa::query()->with('user');
     }
 
     public function relationSearch(): array
@@ -57,12 +57,8 @@ final class MahasiswaTable extends PowerGridComponent
             ->addColumn('id')
             ->addColumn('nim')
             ->addColumn('nama')
-            ->addColumn('email')
-            ->addColumn('jurusan')
-            ->addColumn('alamat')
-            ->addColumn('no_hp')
-            ->addColumn('foto')
-            ->addColumn('created_at');
+            ->addColumn('user.email')
+            ->addColumn('jurusan');
     }
 
     public function columns(): array
@@ -75,6 +71,10 @@ final class MahasiswaTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Nama', 'nama')
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Email', 'user.email')
                 ->sortable()
                 ->searchable(),
 

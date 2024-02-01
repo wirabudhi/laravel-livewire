@@ -11,7 +11,6 @@
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
-                {{-- Membuat form untuk nim, email, jurusan, alamat, no_hp, dan foto --}}
                 <div class="mb-4">
                     <label for="exampleFormControlInput2" class="block text-gray-700 text-sm font-bold mb-2">NIM</label>
                     <input type="text"
@@ -64,7 +63,7 @@
                 <div class="mb-4">
                     <label for="exampleFormControlInput7"
                         class="block text-gray-700 text-sm font-bold mb-2">Foto</label>
-                    <input type="file" id="foto" wire:model.live="foto" x-ref="foto"
+                    <input type="file" id="foto" wire:model.live="foto" x-ref="foto" class="w-full"
                         x-on:change="
                             photoName = $refs.foto.files[0].name;
                             const reader = new FileReader();
@@ -81,6 +80,24 @@
                             <a href="{{ Storage::url($foto) }}" download>Download</a>
                         </x-buttons>
                     @endif
+                </div>
+                <div class="mb-4">
+                    <label for="exampleFormControlInput7" class="block text-gray-700 text-sm font-bold mb-2">Nama
+                        User</label>
+                    <div class="relative">
+                        <select wire:model="user_id"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            placeholder="Pilih User">
+                            <option value="" disabled readonly>-- Pilih User --
+                            </option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>

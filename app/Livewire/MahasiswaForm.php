@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Mahasiswa;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -12,11 +13,12 @@ class MahasiswaForm extends ModalComponent
 {
     use WithFileUploads;
 
-    public $mahasiswa, $mahasiswa_id, $nama, $nim, $email, $jurusan, $alamat, $no_hp, $foto;
+    public $mahasiswa, $mahasiswa_id, $nama, $nim, $email, $jurusan, $alamat, $no_hp, $foto, $user_id;
 
     public function render()
     {
-        return view('livewire.mahasiswa-form');
+        $users = User::all();
+        return view('livewire.mahasiswa-form', compact('users'));
     }
 
     private function resetCreateForm()
@@ -28,6 +30,7 @@ class MahasiswaForm extends ModalComponent
         $this->alamat = '';
         $this->no_hp = '';
         $this->foto = null;
+        $this->user_id = null;
     }
 
     public function store()
@@ -40,6 +43,7 @@ class MahasiswaForm extends ModalComponent
             'alamat' => 'required|min:3',
             'no_hp' => 'required|min:3',
             'foto' => 'nullable|image|max:2048',
+            'user_id' => 'required|exists:users,id',
         ]);
 
         $fotoPath = null;
@@ -60,6 +64,7 @@ class MahasiswaForm extends ModalComponent
             'alamat' => $this->alamat,
             'no_hp' => $this->no_hp,
             'foto' => $fotoPath,
+            'user_id' => $this->user_id,
         ]);
         // dd($this->mahasiswa_id, $this->nama, $this->nim, $this->email, $this->jurusan, $this->alamat, $this->no_hp, $this->foto, $fotoPath);
 
@@ -82,6 +87,7 @@ class MahasiswaForm extends ModalComponent
             $this->alamat = $mahasiswa->alamat;
             $this->no_hp = $mahasiswa->no_hp;
             $this->foto = $mahasiswa->foto;
+            $this->user_id = $mahasiswa->user_id;
         }
     }
 }
