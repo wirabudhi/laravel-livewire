@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Mahasiswa;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use LivewireUI\Modal\ModalComponent;
@@ -43,6 +44,11 @@ class MahasiswaForm extends ModalComponent
 
         $fotoPath = null;
         if ($this->foto) {
+            if ($this->mahasiswa_id && $oldMahasiswa = Mahasiswa::find($this->mahasiswa_id)) {
+                if ($oldMahasiswa->foto) {
+                    Storage::disk('public')->delete($oldMahasiswa->foto);
+                }
+            }
             $fotoPath = $this->foto->store('mahasiswa-photos', 'public');
         }
 

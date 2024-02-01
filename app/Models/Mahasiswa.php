@@ -24,4 +24,9 @@ class Mahasiswa extends Model
     {
         $query->where('nama', 'like', "%{$value}%")->orWhere('email', 'like', "%{$value}%");
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

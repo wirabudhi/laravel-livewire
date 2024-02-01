@@ -77,7 +77,9 @@
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
                     @if ($foto)
-                        <a href="{{ Storage::url($foto) }}" download>Download</a>
+                        <x-buttons icon="download" emerald class="mt-2">
+                            <a href="{{ Storage::url($foto) }}" download>Download</a>
+                        </x-buttons>
                     @endif
                 </div>
             </div>
