@@ -23,6 +23,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $latitude = '-8.5469048';  // Tentukan nilai default atau ambil dari sumber lain
+        $longitude = '115.124006';
+        return view('dashboard', compact('latitude', 'longitude'));
     })->name('dashboard');
 });
